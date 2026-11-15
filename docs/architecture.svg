@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 600" width="760" height="600" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#4a5568"/>
+    </marker>
+    <marker id="arrow-wg" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#2f855a"/>
+    </marker>
+  </defs>
+
+  <rect width="760" height="600" fill="#ffffff"/>
+
+  <!-- Internet -->
+  <rect x="280" y="20" width="200" height="50" rx="25" fill="#edf2f7" stroke="#4a5568"/>
+  <text x="380" y="50" text-anchor="middle" font-weight="600">Internet</text>
+
+  <!-- Internet Gateway -->
+  <rect x="300" y="100" width="160" height="40" rx="6" fill="#fefcbf" stroke="#975a16"/>
+  <text x="380" y="125" text-anchor="middle">Internet Gateway</text>
+
+  <!-- VPC -->
+  <rect x="20" y="170" width="720" height="350" rx="10" fill="none" stroke="#2b6cb0" stroke-width="2"/>
+  <text x="36" y="192" fill="#2b6cb0" font-weight="600">Default VPC (172.31.0.0/16 + secondary 172.16.0.0/16)</text>
+
+  <!-- Default (public) subnet -->
+  <rect x="45" y="212" width="210" height="113" rx="8" fill="#ebf8ff" stroke="#3182ce" stroke-dasharray="4 3"/>
+  <text x="57" y="232" fill="#2c5282" font-size="13">Default (public) subnet</text>
+
+  <!-- Private subnet -->
+  <rect x="40" y="370" width="680" height="135" rx="8" fill="#fff5f5" stroke="#c53030" stroke-dasharray="4 3"/>
+  <text x="56" y="391" fill="#9b2c2c" font-size="13">Private subnet 172.16.0.0/16 (created by Terraform)</text>
+  <text x="300" y="485" fill="#9b2c2c" font-size="13">No public IP · default route → NAT Gateway</text>
+
+  <!-- Boxes -->
+  <rect x="70" y="250" width="160" height="60" rx="6" fill="#ffffff" stroke="#4a5568"/>
+  <text x="150" y="276" text-anchor="middle" font-weight="600">NAT Gateway</text>
+  <text x="150" y="295" text-anchor="middle" font-size="12" fill="#4a5568">outbound only</text>
+
+  <rect x="300" y="250" width="160" height="60" rx="6" fill="#ffffff" stroke="#2f855a" stroke-width="2"/>
+  <text x="380" y="276" text-anchor="middle" font-weight="600">relay</text>
+  <text x="380" y="295" text-anchor="middle" font-size="12" fill="#4a5568">WireGuard hub · public IP</text>
+
+  <rect x="530" y="250" width="160" height="60" rx="6" fill="#ffffff" stroke="#4a5568"/>
+  <text x="610" y="276" text-anchor="middle" font-weight="600">client</text>
+  <text x="610" y="295" text-anchor="middle" font-size="12" fill="#4a5568">WireGuard peer · public IP</text>
+
+  <rect x="70" y="420" width="160" height="60" rx="6" fill="#ffffff" stroke="#4a5568"/>
+  <text x="150" y="446" text-anchor="middle" font-weight="600">server</text>
+  <text x="150" y="465" text-anchor="middle" font-size="12" fill="#4a5568">WireGuard peer · service</text>
+
+  <!-- Network paths -->
+  <g stroke="#4a5568" stroke-width="1.5" fill="none">
+    <line x1="380" y1="100" x2="380" y2="72" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+    <line x1="150" y1="420" x2="150" y2="312" marker-end="url(#arrow)"/>
+    <line x1="150" y1="250" x2="318" y2="142" marker-end="url(#arrow)"/>
+    <line x1="380" y1="250" x2="380" y2="142" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+    <line x1="610" y1="250" x2="442" y2="142" marker-end="url(#arrow)" marker-start="url(#arrow)"/>
+  </g>
+
+  <!-- WireGuard tunnels (logical) -->
+  <g stroke="#2f855a" stroke-width="2.5" stroke-dasharray="7 5" fill="none">
+    <path d="M232,450 C330,450 380,400 380,312" marker-end="url(#arrow-wg)"/>
+    <line x1="528" y1="280" x2="462" y2="280" marker-end="url(#arrow-wg)"/>
+  </g>
+  <text x="390" y="360" fill="#2f855a" font-size="12">tunnel initiated by server (via NAT Gateway)</text>
+
+  <!-- Legend -->
+  <g font-size="13">
+    <line x1="40" y1="560" x2="90" y2="560" stroke="#4a5568" stroke-width="1.5"/>
+    <text x="100" y="565">Network path</text>
+    <line x1="230" y1="560" x2="280" y2="560" stroke="#2f855a" stroke-width="2.5" stroke-dasharray="7 5"/>
+    <text x="290" y="565">WireGuard tunnel (UDP, initiated by peer)</text>
+  </g>
+</svg>
