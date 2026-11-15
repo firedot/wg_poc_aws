@@ -28,7 +28,7 @@
 
   <!-- Private subnet -->
   <rect x="40" y="370" width="680" height="135" rx="8" fill="#fff5f5" stroke="#c53030" stroke-dasharray="4 3"/>
-  <text x="56" y="391" fill="#9b2c2c" font-size="13">Private subnet 172.16.0.0/16 (created by Terraform)</text>
+  <text x="56" y="391" fill="#9b2c2c" font-size="13">Private subnet 172.16.1.0/24 (created by Terraform)</text>
   <text x="300" y="485" fill="#9b2c2c" font-size="13">No public IP · default route → NAT Gateway</text>
 
   <!-- Boxes -->

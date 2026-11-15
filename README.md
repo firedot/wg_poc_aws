@@ -29,7 +29,7 @@ All instances run Debian Linux.
 The environment uses the account's **default VPC**. Terraform:
 
 - adds `172.16.0.0/16` to the default VPC as a secondary CIDR block
-- creates the server's private subnet (`172.16.0.0/16`) from that block
+- creates the server's private subnet (`172.16.1.0/24`) from that block
 - creates the private subnet's route table, with the default route pointing to the NAT Gateway
 
 The NAT Gateway goes in an existing default (public) subnet.
