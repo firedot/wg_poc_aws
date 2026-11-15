@@ -55,8 +55,8 @@ resource "aws_nat_gateway" "wg-poc-server" {
 resource "aws_route_table" "wg-poc-server" {
   vpc_id = data.aws_vpc.default.id
   route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.wg-poc-server.id
+    cidr_block     = "0.0.0.0/0"
+    nat_gateway_id = aws_nat_gateway.wg-poc-server.id
   }
   tags = { Name = "wg-poc-route_table" }
 }
