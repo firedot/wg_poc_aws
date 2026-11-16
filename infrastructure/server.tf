@@ -13,10 +13,13 @@ data "aws_ami" "debian" {
 }
 
 resource "aws_instance" "server" {
-  ami           = data.aws_ami.debian.id
-  instance_type = "t3.micro"
+  ami                         = data.aws_ami.debian.id
+  instance_type               = "t3.micro"
+  subnet_id                   = aws_subnet.private.id
+  vpc_security_group_ids      = [aws_security_group.wg-poc-server.id]
+  associate_public_ip_address = false
 
   tags = {
-    Name = "wg-poc-ec2_server"
+    Name = "wg-poc-server"
   }
 }
