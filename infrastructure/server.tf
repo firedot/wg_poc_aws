@@ -1,3 +1,4 @@
+# Latest official Debian 13 (amd64) AMI, published by Debian's AWS account
 data "aws_ami" "debian" {
   most_recent = true
   owners      = ["136693071363"] # Debian
@@ -12,6 +13,7 @@ data "aws_ami" "debian" {
   }
 }
 
+# Server instance: private subnet, no public IP, outbound-only through the NAT GW
 resource "aws_instance" "server" {
   ami                         = data.aws_ami.debian.id
   instance_type               = "t3.micro"
