@@ -9,7 +9,7 @@ output "server_ami_id" {
 }
 
 output "server_admin_password" {
-    description= "Password of the admin (serial console login)"
-    value = random_password.admin.result
-    sensitive = true
+  description = "Password of the admin (serial console login)"
+  value       = random_password.admin.result
+  sensitive   = true
 }
