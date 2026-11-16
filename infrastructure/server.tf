@@ -15,8 +15,8 @@ data "aws_ami" "debian" {
 
 # Generate random password for the server instance
 resource "random_password" "admin" {
-    length = 20
-    special = true
+  length  = 20
+  special = true
 }
 
 # Server instance: private subnet, no public IP, outbound-only through the NAT GW
