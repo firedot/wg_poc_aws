@@ -25,7 +25,7 @@ resource "aws_subnet" "private" {
   tags              = { Name = "wg-poc-private_subnet" }
 }
 
-# security group to disable inbound traffic to the server instance
+# Server SG: no ingress rules; all egress allowed
 resource "aws_security_group" "wg-poc-server" {
   name   = "wg-poc-server"
   vpc_id = data.aws_vpc.default.id
@@ -36,13 +36,13 @@ resource "aws_security_group" "wg-poc-server" {
     cidr_blocks      = ["0.0.0.0/0"]
     ipv6_cidr_blocks = ["::/0"]
   }
-  tags = { Name = "wg-poc-SG" }
+  tags = { Name = "wg-poc-SG-server" }
 }
 
 # elastic IP to be used by the NAT GW
 resource "aws_eip" "nat" {
   domain = "vpc"
-  tags   = { Name = "wg-poc-EIP" }
+  tags   = { Name = "wg-poc-EIP-NAT-GW" }
 }
 
 # NAT GW to be used by the private subnet in which the server resides
@@ -52,6 +52,7 @@ resource "aws_nat_gateway" "wg-poc-server" {
   tags          = { Name = "wg-poc-NAT_GW" }
 }
 
+# Private route table: default route through the NAT GW
 resource "aws_route_table" "wg-poc-server" {
   vpc_id = data.aws_vpc.default.id
   route {
@@ -61,7 +62,33 @@ resource "aws_route_table" "wg-poc-server" {
   tags = { Name = "wg-poc-route_table" }
 }
 
-resource "aws_route_table_association" "wg-proc-server" {
+# Attach the private route table to the server's subnet
+resource "aws_route_table_association" "wg-poc-server" {
   subnet_id      = aws_subnet.private.id
   route_table_id = aws_route_table.wg-poc-server.id
+}
+
+# Relay SG: Rules are defined as separate resources below
+resource "aws_security_group" "wg-poc-relay" {
+  name   = "wg-poc-relay"
+  vpc_id = data.aws_vpc.default.id
+  tags   = { Name = "wg-poc-SG-relay" }
+}
+
+# Relay egress: all traffic (no inline rules; separate resource)
+resource "aws_vpc_security_group_egress_rule" "relay_all" {
+  security_group_id = aws_security_group.wg-poc-relay.id
+  cidr_ipv4         = "0.0.0.0/0"
+  ip_protocol       = "-1"
+  tags              = { Name = "wg-poc-SG-r_egress-relay" }
+}
+
+# Relay ingress: WireGuard (UDP 51820) from anywhere
+resource "aws_vpc_security_group_ingress_rule" "allow_udp_wireguard" {
+  security_group_id = aws_security_group.wg-poc-relay.id
+  cidr_ipv4         = "0.0.0.0/0"
+  from_port         = 51820
+  ip_protocol       = "udp"
+  to_port           = 51820
+  tags              = { Name = "wg-poc-SG-r_ingress-relay" }
 }
